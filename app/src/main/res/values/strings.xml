@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Sunshine</string>
+    <string name="default_forecast" translatable="false">Today: Sunny with High: 75 and Low: 60</string>
+    <string name="action_share">Share</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="title_activity_detail">DetailActivity</string>
+    <string name="permission_required_title">Permission Required</string>
+    <string name="location_permission_reasoning_text">The Location permission is needed for your device to get the local forecast. Please allow permission when prompted.</string>
+    <string name="permission_granted_text">permission GRANTED</string>
+    <string name="button_text_ok">OK</string>
+    <string name="pref_location_label">Postal Code</string>
+    <string name="pref_location_key" translatable="false">location</string>
+    <string name="pref_location_default" translatable="false">92026</string>
+
+    <string name="pref_units_label">Temperature Units</string>
+    <string name="pref_units_key" translatable="false">units</string>
+    <string name="pref_units_default" translatable="false">US</string>
+    <string name="action_map">Map Location</string>
+
+    <!-- Arrows -->
+    <string name="unicode_high_arrow">↑︎︎</string>
+    <string name="unicode_low_arrow">↓</string>
+    <string name="today_text_value">Today</string>
+    <string name="high_string">High:</string>
+    <string name="low_string">Low:</string>
+
+</resources>
