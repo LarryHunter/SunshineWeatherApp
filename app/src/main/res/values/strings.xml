@@ -2,11 +2,11 @@
 <resources>
 
     <!-- Default values -->
-    <string name="app_name">Sunshine</string>
+    <string name="app_name">Forecast</string>
     <string name="default_forecast" translatable="false">Today: Sunny with High: 75 and Low: 60</string>
-    <string name="default_city_name" translatable="false">Escondido</string>
+    <string name="default_city_name" translatable="false">San Diego</string>
     <string name="pref_location_key" translatable="false">location</string>
-    <string name="pref_location_default" translatable="false">92026</string>
+    <string name="pref_location_default" translatable="false">92101</string>
     <string name="pref_units_key" translatable="false">units</string>
     <string name="pref_units_default" translatable="false">US</string>
 
