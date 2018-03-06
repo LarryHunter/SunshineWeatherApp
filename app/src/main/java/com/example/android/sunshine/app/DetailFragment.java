@@ -16,64 +16,71 @@ import android.widget.TextView;
 
 public class DetailFragment extends Fragment
 {
-	private static final String LOG_TAG = DetailFragment.class.getSimpleName();
-	private static final String FORECAST_SHARE_HASHTAG = " #SunshineApp";
-	private String m_forecastString;
+    private static final String LOG_TAG = DetailFragment.class.getSimpleName();
+    private static final String FORECAST_SHARE_HASHTAG = " #SunshineApp";
+    private String m_forecastString;
+    private String m_cityName;
 
-	public DetailFragment()
-	{
-	}
+    public DetailFragment()
+    {
+    }
 
-	@Override
-	public void onCreate(Bundle savedInstanceState)
-	{
-		setHasOptionsMenu(true);
-		super.onCreate(savedInstanceState);
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState);
+    }
 
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-	{
-		// Inflate the menu
-		inflater.inflate(R.menu.detailfragment, menu);
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
+        // Inflate the menu
+        inflater.inflate(R.menu.detailfragment, menu);
 
-		// Retrieve the share menu item
-		MenuItem menuItem = menu.findItem(R.id.action_share);
+        // Retrieve the share menu item
+        MenuItem menuItem = menu.findItem(R.id.action_share);
 
-		// Get the provider and hold on to it to set/change the share intent
-		ShareActionProvider m_shareActionProvider =
-			(ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+        // Get the provider and hold on to it to set/change the share intent
+        ShareActionProvider m_shareActionProvider =
+            (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
 
-		// Attach an intent to the ShareActionProvider. This can be updated at any time,
-		// like when the user selects a new piece of data they may want to share
-		if (m_shareActionProvider != null)
-		{ m_shareActionProvider.setShareIntent(createShareForecastIntent()); }
-		else
-		{ Log.d(LOG_TAG, "Share Action Provider is null!"); }
+        // Attach an intent to the ShareActionProvider. This can be updated at any time,
+        // like when the user selects a new piece of data they may want to share
+        if (m_shareActionProvider != null)
+        { m_shareActionProvider.setShareIntent(createShareForecastIntent()); }
+        else
+        { Log.d(LOG_TAG, "Share Action Provider is null!"); }
 
-		super.onCreateOptionsMenu(menu, inflater);
-	}
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-	{
-		View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
-		Intent intent = getActivity().getIntent();
-		if (intent.getExtras() != null)
-		{ m_forecastString = intent.getStringExtra("ForecastDetail"); }
-		TextView forecastText = rootView.findViewById(R.id.forecast_text);
-		forecastText.setText(m_forecastString);
+        Intent intent = getActivity().getIntent();
+        if (intent.getExtras() != null)
+        {
+            m_cityName = intent.getStringExtra("CityName");
+            m_forecastString = intent.getStringExtra("ForecastDetail");
+        }
+        TextView forecastText = rootView.findViewById(R.id.id_forecast_text);
+        forecastText.setText(m_forecastString);
 
-		return rootView;
-	}
+        TextView cityName = rootView.findViewById(R.id.id_city_name);
+        cityName.setText(m_cityName);
 
-	private Intent createShareForecastIntent()
-	{
-		Intent shareIntent = new Intent(Intent.ACTION_SEND);
-		shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-		shareIntent.setType("text/plain");
-		shareIntent.putExtra(Intent.EXTRA_TEXT, m_forecastString + FORECAST_SHARE_HASHTAG);
-		return shareIntent;
-	}
+        return rootView;
+    }
+
+    private Intent createShareForecastIntent()
+    {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, m_forecastString + FORECAST_SHARE_HASHTAG);
+        return shareIntent;
+    }
 }

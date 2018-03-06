@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -171,13 +172,19 @@ public class MainActivity extends AppCompatActivity
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
             {
                 m_locationPermissionGranted = true;
-                Snackbar.make(m_snackbarView,
-                    "Location permission successfully granted.", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(m_snackbarView, "Location permission successfully granted.", Snackbar.LENGTH_SHORT).show();
             }
             else
             {
-                Snackbar.make(m_snackbarView,
-                    "Location permission denied.", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(m_snackbarView, "Location permission denied.", Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.button_text_ok, new OnClickListener()
+                    {
+                        @Override
+                        public void onClick(View v)
+                        {
+                            finish();
+                        }
+                    }).show();
             }
         }
     }

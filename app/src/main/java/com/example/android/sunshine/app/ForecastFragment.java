@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -40,6 +41,7 @@ public class ForecastFragment extends Fragment
 {
     private static final String API_APP_ID = "dbf3860a9560b934c5f8f3acb79b633f";
     private static ArrayAdapter<String> s_forecastAdapter;
+    private TextView m_cityName;
 
     public ForecastFragment()
     {
@@ -98,17 +100,20 @@ public class ForecastFragment extends Fragment
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        // Get a reference of the ListView and attache the adapter to it
-        final ListView forecastListView = rootView.findViewById(R.id.listview_forecast);
+        // Get a reference of the city name TextView
+        m_cityName = rootView.findViewById(R.id.id_city_name);
+
+        // Get a reference of the ListView and attach the adapter to it
+        final ListView forecastListView = rootView.findViewById(R.id.id_listview_forecast);
         forecastListView.setAdapter(s_forecastAdapter);
         forecastListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                String forcast = s_forecastAdapter.getItem(position);
+                String forecast = s_forecastAdapter.getItem(position);
                 Intent detailIntent = new Intent(getContext(), DetailActivity.class);
-                detailIntent.putExtra("ForecastDetail", forcast);
+                detailIntent.putExtra("ForecastDetail", forecast);
                 startActivity(detailIntent);
             }
         });
@@ -140,9 +145,7 @@ public class ForecastFragment extends Fragment
         {
             // If there's no zip code, there's nothing to look up. Verify size of params
             if (params.length == 0)
-            {
-                return null;
-            }
+            { return null; }
 
             // These two need to be declared outside the try/catch
             // so that they can be closed in the finally block.
@@ -153,12 +156,12 @@ public class ForecastFragment extends Fragment
             String forecastJsonStr;
             String format = "json";
             String units = "metric";
-            int numDays = 7;
+            int numDays = 10;
 
             try
             {
                 // Construct the URL for the OpenWeatherMap query
-                // Possible parameters are available at OWM's forecast API page, at
+                // Possible parameters are available at OWM's forecast API page at:
                 // http://openweathermap.org/API#forecast
                 final String FORECAST_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?";
                 //final String QUERY_PARAM_CITY = "q";
@@ -185,7 +188,6 @@ public class ForecastFragment extends Fragment
 
                 // Read the input stream into a String
                 InputStream inputStream = urlConnection.getInputStream();
-                //StringBuffer buffer = new StringBuffer();
                 StringBuilder builder = new StringBuilder();
                 if (inputStream == null)
                 {
@@ -222,9 +224,8 @@ public class ForecastFragment extends Fragment
             finally
             {
                 if (urlConnection != null)
-                {
-                    urlConnection.disconnect();
-                }
+                { urlConnection.disconnect(); }
+
                 if (reader != null)
                 {
                     try
@@ -292,6 +293,8 @@ public class ForecastFragment extends Fragment
         private String[] getWeatherDataFromJson(String forecastJsonStr, int numDays) throws JSONException
         {
             // These are the names of the JSON objects that need to be extracted.
+            final String OWM_CITY = "city";
+            final String OWM_CITY_NAME = "name";
             final String OWM_LIST = "list";
             final String OWM_WEATHER = "weather";
             final String OWM_TEMPERATURE = "temp";
@@ -302,14 +305,16 @@ public class ForecastFragment extends Fragment
             JSONObject forecastJson = new JSONObject(forecastJsonStr);
             JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
 
-            // OWM returns daily forecasts based upon the local time of the city that is being
-            // asked for, which means that we need to know the GMT offset to translate this data
-            // properly.
+            // city is in a child array called "city", which is 1 element long.
+            String cityName = forecastJson.getJSONObject(OWM_CITY).getString(OWM_CITY_NAME);
+            String cityForcast = String.format(getString(R.string.city_forcast_string), cityName, numDays);
+            m_cityName.setText(cityForcast);
 
-            // Since this data is also sent in-order and the first day is always the
-            // current day, we're going to take advantage of that to get a nice
-            // normalized UTC date for all of our weather.
+            // OWM returns daily forecasts based upon the local time of the city that is being asked for
+            // which means that we need to know the GMT offset to translate this data properly.
 
+            // Since this data is also sent in-order and the first day is always the current day,
+            // we're going to take advantage of that to get a nice normalized UTC date for all of our weather.
             Time dayTime = new Time();
             dayTime.setToNow();
 
