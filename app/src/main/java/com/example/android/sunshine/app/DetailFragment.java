@@ -19,7 +19,6 @@ public class DetailFragment extends Fragment
     private static final String LOG_TAG = DetailFragment.class.getSimpleName();
     private static final String FORECAST_SHARE_HASHTAG = " #SunshineApp";
     private String m_forecastString;
-    private String m_cityName;
 
     public DetailFragment()
     {
@@ -63,14 +62,10 @@ public class DetailFragment extends Fragment
         Intent intent = getActivity().getIntent();
         if (intent.getExtras() != null)
         {
-            m_cityName = intent.getStringExtra("CityName");
             m_forecastString = intent.getStringExtra("ForecastDetail");
         }
         TextView forecastText = rootView.findViewById(R.id.id_forecast_text);
         forecastText.setText(m_forecastString);
-
-        TextView cityName = rootView.findViewById(R.id.id_city_name);
-        cityName.setText(m_cityName);
 
         return rootView;
     }
